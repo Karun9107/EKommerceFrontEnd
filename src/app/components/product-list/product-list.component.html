@@ -1,1 +1,11 @@
-<p>product-list works!</p>
+
+<p *ngFor="let product of products">
+    {{product.sku}}
+    {{product.name}}
+    {{product.description}}
+    {{product.unitPrice | currency : 'INR'}}
+    {{product.active}}
+    {{product.unitsInStock}}
+    {{product.createdAt}}
+    {{product.updatedAt}}
+</p>
