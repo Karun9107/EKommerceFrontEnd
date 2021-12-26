@@ -12,10 +12,10 @@ export class ProductListComponent implements OnInit {
 
   products: Product[]
   currentCategoryId: number;
+  currentCategoryName: string;
   constructor(private productService: ProductService, private route:ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log(this.products)
     this.route.paramMap.subscribe(
       () =>  this.listProducts()
     );
@@ -25,14 +25,15 @@ export class ProductListComponent implements OnInit {
 
     // check if id parameter is available
     let hasCategoryId : boolean = this.route.snapshot.paramMap.has('id');
-
+    let hasCategoryName : boolean = this.route.snapshot.paramMap.has('categoryName');
+ 
     this.currentCategoryId = hasCategoryId ? +this.route.snapshot.paramMap.get('id')! : 1;
+    this.currentCategoryName = hasCategoryName ? this.route.snapshot.paramMap.get('categoryName')! : 'Books';
 
     this.productService.getProductList(this.currentCategoryId).subscribe(
       data => this.products = data
     );
 
-    console.log(JSON.stringify(this.products));
   }
 
 }

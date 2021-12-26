@@ -9,7 +9,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProductCategoryMenuComponent } from './components/product-category-menu/product-category-menu.component';
 
 const routes: Routes = [
-  {path: 'category/:id', component: ProductListComponent},
+  {path: 'category/:id/:categoryName', component: ProductListComponent},
   {path: 'category', component: ProductListComponent},
   {path: ' ', redirectTo: 'category', pathMatch: 'full'},
   {path: '**', redirectTo: 'category', pathMatch: 'full'}
