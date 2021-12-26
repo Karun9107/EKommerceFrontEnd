@@ -15,6 +15,7 @@ export class ProductListComponent implements OnInit {
   constructor(private productService: ProductService, private route:ActivatedRoute) { }
 
   ngOnInit(): void {
+    console.log(this.products)
     this.route.paramMap.subscribe(
       () =>  this.listProducts()
     );
@@ -30,6 +31,8 @@ export class ProductListComponent implements OnInit {
     this.productService.getProductList(this.currentCategoryId).subscribe(
       data => this.products = data
     );
+
+    console.log(JSON.stringify(this.products));
   }
 
 }
