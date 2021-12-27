@@ -13,6 +13,13 @@ export class ProductService {
   private baseUrl = 'http://localhost:8080/api/products';
   constructor(private httpClient:HttpClient) { }
 
+  getPageableProductList(categoryId : number, page :number, size :number): Observable<GetResponseForProducts> {
+    let searchUrl : string = `${this.baseUrl}/search/findByCategoryId?id=${categoryId}`
+    return this.httpClient.get<GetResponseForProducts>(`${searchUrl}&page=${page}&size=${size}`).pipe(
+      map(response => response)
+    )
+  }
+
   getProductList(categoryId : number): Observable<Product[]> {
     let searchUrl : string = `${this.baseUrl}/search/findByCategoryId?id=${categoryId}`
     return this.httpClient.get<GetResponseForProducts>(searchUrl).pipe(
@@ -39,15 +46,27 @@ export class ProductService {
   }
 }
 
-interface GetResponseForProducts {
+ interface GetResponseForProducts {
     _embedded: {
       products : Product[];
+    },
+    page : {
+      size : number;
+      totalElements : number;
+      totalPages : number;
+      number : number;
     }
 }
 
 interface GetResponseForProductCategories {
   _embedded: {
     productCategory : ProductCategory[];
+  }, 
+  page : {
+    size : number;
+    totalElements : number;
+    totalPages : number;
+    number : number;
   }
 }
 
