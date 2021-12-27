@@ -7,10 +7,10 @@
                 <!--loop over products-->
                 <div  *ngFor="let product of products" class="col-md-3">
                     <div class="product-box">
-                        <a href="product-detail.html">
+                        <a routerLink="/products/{{product.id}}/{{currentCategoryId}}/{{currentCategoryName}">
                             <img src={{product.imageUrl}} class="img-responsive">
                         </a>
-                        <a href="product-detail.html">
+                        <a routerLink="/products/{{product.id}}/{{currentCategoryId}}/{{currentCategoryName}}">
                             <h1>{{product.name}}</h1>
                         </a>
                         <h2> </h2>
