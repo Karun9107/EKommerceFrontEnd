@@ -16,6 +16,7 @@ export class ProductListComponent implements OnInit {
   currentCategoryName: string;
   searchMode: boolean
   keyword: string;
+  previousKeyword: string;
 
   //pagination elements
   page: number = 1;
@@ -43,9 +44,21 @@ export class ProductListComponent implements OnInit {
     if (this.searchMode) {
       this.currentCategoryName = 'All';
       this.keyword = this.route.snapshot.paramMap.get('keyword')!;
-      this.productService.getProductsByKeyword(this.keyword).subscribe(
-        data => this.products = data
+
+      if(this.previousKeyword != this.keyword) {
+        this.page = 1;
+      }
+      this.previousKeyword = this.keyword;
+      
+      this.productService.getPageableProductsByKeyword(this.keyword, this.page - 1, this.size).subscribe(
+        data => {
+          this.products = data._embedded.products;
+          this.page = data.page.number + 1;
+          this.size = data.page.size;
+          this.totalElements = data.page.totalElements;
+        }
       );
+
     } else {
       let hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
       let hasCategoryName: boolean = this.route.snapshot.paramMap.has('categoryName');

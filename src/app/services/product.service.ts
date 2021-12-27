@@ -20,10 +20,10 @@ export class ProductService {
     )
   }
 
-  getProductList(categoryId : number): Observable<Product[]> {
-    let searchUrl : string = `${this.baseUrl}/search/findByCategoryId?id=${categoryId}`
-    return this.httpClient.get<GetResponseForProducts>(searchUrl).pipe(
-      map(response => response._embedded.products)
+  getPageableProductsByKeyword(keyword : string, page :number, size :number): Observable<GetResponseForProducts> {
+    let searchUrl : string = `${this.baseUrl}/search/findByNameContaining?name=${encodeURIComponent(keyword)}`
+    return this.httpClient.get<GetResponseForProducts>(`${searchUrl}&page=${page}&size=${size}`).pipe(
+      map(response => response)
     )
   }
 
@@ -34,19 +34,12 @@ export class ProductService {
     )
   }
 
-  getProductsByKeyword(keyword : string): Observable<Product[]> {
-    let searchUrl : string = `${this.baseUrl}/search/findByNameContaining?name=${keyword}`
-    return this.httpClient.get<GetResponseForProducts>(searchUrl).pipe(
-      map(response => response._embedded.products)
-    )
-  }
-
   getProduct(id:number): Observable<Product> {
     return this.httpClient.get<Product>(`${this.baseUrl}/${id}`)
   }
 }
 
- interface GetResponseForProducts {
+ export interface GetResponseForProducts {
     _embedded: {
       products : Product[];
     },
