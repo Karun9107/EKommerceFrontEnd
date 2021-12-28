@@ -13,6 +13,8 @@ export class ProductDetailsComponent implements OnInit {
   product: Product = new Product();
   currentCategoryId : number;
   currentCategoryName : string;
+  searchResult : boolean = false;
+  keyword : string;
   constructor(private productService: ProductService,  private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -22,8 +24,13 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   getProductDetails() {
+    this.searchResult = this.route.snapshot.paramMap.has('keyword')
+    if(this.searchResult) {
+      this.keyword =  this.route.snapshot.paramMap.get('keyword')!
+    } else {
     this.currentCategoryId = +this.route.snapshot.paramMap.get('cat-id')!
     this.currentCategoryName =  this.route.snapshot.paramMap.get('cat-name')!
+    }
     return this.productService.getProduct(+this.route.snapshot.paramMap.get('id')!).subscribe(
       data => this.product = data
     );

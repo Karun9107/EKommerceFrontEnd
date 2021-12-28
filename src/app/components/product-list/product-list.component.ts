@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CartItem } from 'src/app/common/cart-item';
 import { Product } from 'src/app/common/product';
+import { CartService } from 'src/app/services/cart.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -23,7 +25,7 @@ export class ProductListComponent implements OnInit {
   size: number = 5;
   totalElements: number = 0;
 
-  constructor(private productService: ProductService, private route: ActivatedRoute) { }
+  constructor(private productService: ProductService, private route: ActivatedRoute, private cartService: CartService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(
@@ -31,7 +33,7 @@ export class ProductListComponent implements OnInit {
     );
   }
 
-  updatePageSize(size : number) {
+  updatePageSize(size: number) {
     this.size = size;
     this.page = 1;
     this.listProducts();
@@ -42,14 +44,14 @@ export class ProductListComponent implements OnInit {
     // check if id parameter is available
     this.searchMode = this.route.snapshot.paramMap.has('keyword');
     if (this.searchMode) {
-      this.currentCategoryName = 'All';
+      this.currentCategoryName = 'Search Results';
       this.keyword = this.route.snapshot.paramMap.get('keyword')!;
 
-      if(this.previousKeyword != this.keyword) {
+      if (this.previousKeyword != this.keyword) {
         this.page = 1;
       }
       this.previousKeyword = this.keyword;
-      
+
       this.productService.getPageableProductsByKeyword(this.keyword, this.page - 1, this.size).subscribe(
         data => {
           this.products = data._embedded.products;
@@ -68,19 +70,22 @@ export class ProductListComponent implements OnInit {
 
       if (this.previousCategoryId != this.currentCategoryId) {
         this.page = 1;
-      } 
-        this.previousCategoryId = this.currentCategoryId
-        this.productService.getPageableProductList(this.currentCategoryId, this.page - 1, this.size).subscribe(
-          data => {
-            this.products = data._embedded.products;
-            this.page = data.page.number + 1;
-            this.size = data.page.size;
-            this.totalElements = data.page.totalElements;
-          }
-        );
-
-
+      }
+      this.previousCategoryId = this.currentCategoryId
+      this.productService.getPageableProductList(this.currentCategoryId, this.page - 1, this.size).subscribe(
+        data => {
+          this.products = data._embedded.products;
+          this.page = data.page.number + 1;
+          this.size = data.page.size;
+          this.totalElements = data.page.totalElements;
+        }
+      );
     }
+  }
 
+  addToCart(product : Product) {
+    let item : CartItem = new CartItem(product);
+
+    this.cartService.addToCart(item);
   }
 }

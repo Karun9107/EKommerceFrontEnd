@@ -13,8 +13,9 @@
 
                     <h4>Product Description</h4>
                     <p>{{ product.description}}</p>
-
-                    <a routerLink="/category/{{currentCategoryId}}/{{currentCategoryName}}">Back to Product List</a>
+                    <a *ngIf="searchResult; else elseBlock1" routerLink="/search/{{keyword}}">Back to Product List</a>
+                    <ng-template #elseBlock1> <a routerLink="/category/{{currentCategoryId}}/{{currentCategoryName}}">
+                            Back to Product List </a></ng-template>
                 </div>
             </div>
         </div>

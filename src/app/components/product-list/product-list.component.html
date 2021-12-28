@@ -1,25 +1,32 @@
 <div class="main-content">
     <div class="section-content section-content-p30">
-        <h4>Category: {{currentCategoryName}}</h4>
-        <hr/>
+        <h4>{{currentCategoryName}}</h4>
+        <hr />
         <div class="container-fluid">
             <div class="row">
                 <!--loop over products-->
-                <div  *ngFor="let product of products" class="col-md-3">
+                <div *ngFor="let product of products" class="col-md-3">
                     <div class="product-box">
-                        <a routerLink="/products/{{product.id}}/{{currentCategoryId}}/{{currentCategoryName}">
+                        <a *ngIf="searchMode; else elseBlock1" routerLink="/search/{{product.id}}/{{keyword}}">
                             <img src={{product.imageUrl}} class="img-responsive">
                         </a>
-                        <a routerLink="/products/{{product.id}}/{{currentCategoryId}}/{{currentCategoryName}}">
+                        <ng-template #elseBlock1> <a
+                                routerLink="/products/{{product.id}}/{{currentCategoryId}}/{{currentCategoryName}}">
+                                <img src={{product.imageUrl}} class="img-responsive">
+                            </a></ng-template>
+                        <a *ngIf="searchMode; else elseBlock2" routerLink="/search/{{product.id}}/{{keyword}}">
                             <h1>{{product.name}}</h1>
                         </a>
-                        <h2> </h2>
+                        <ng-template #elseBlock2> <a routerLink="/products/{{product.id}}/{{currentCategoryId}}/{{currentCategoryName}}">
+                                <h1>{{product.name}}</h1>
+                            </a></ng-template>
                         <div class="price">{{product.unitPrice | currency : 'INR'}}</div>
-                        <a href="#" class="primary-btn">Add to cart</a>
+                        <button (click)="addToCart(product)" class="btn btn-primary btn-sm">Add to cart</button>
                     </div>
                 </div>
                 <!-- if no search results -->
-                <div *ngIf="products?.length==0" class="alert alert-warning col-md-12" role="alert"> No products found with keyword "{{keyword}}"</div>
+                <div *ngIf="products?.length==0" class="alert alert-warning col-md-12" role="alert"> No products found
+                    with keyword "{{keyword}}"</div>
             </div>
 
             <!-- begin footer -->
@@ -28,13 +35,8 @@
                     <div class="col-md-6"></div>
                     <div class="col-md-6">
                         <div class="col-md-9" style="padding-left: 10%;">
-                            <ngb-pagination 
-                            [(page)]="page"
-                            [pageSize]="size"
-                            [collectionSize] = "totalElements"
-                            [maxSize] = "5"
-                            [boundaryLinks] = "true"
-                            (pageChange) = "listProducts()">
+                            <ngb-pagination [(page)]="page" [pageSize]="size" [collectionSize]="totalElements"
+                                [maxSize]="5" [boundaryLinks]="true" (pageChange)="listProducts()">
                             </ngb-pagination>
                         </div>
 
@@ -42,9 +44,9 @@
                             <span class="mr-2"> Page Size</span>
                             <select (change)="updatePageSize($any($event.target).value)">
                                 <option selected="true">5</option>
-                                <option >10</option>
-                                <option >20</option>
-                                <option >50</option>
+                                <option>10</option>
+                                <option>20</option>
+                                <option>50</option>
                             </select>
                         </div>
                     </div>
