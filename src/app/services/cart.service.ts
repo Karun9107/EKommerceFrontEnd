@@ -34,6 +34,11 @@ export class CartService {
     this.computeCartTotals();
   }
 
+  removeItem(item: CartItem) {
+    this.cartItems.splice(this.cartItems.indexOf(item), 1);
+    this.computeCartTotals();
+  }
+  
   computeCartTotals() {
     let totalPrice: number = 0;
     let totalQuantity: number = 0;
