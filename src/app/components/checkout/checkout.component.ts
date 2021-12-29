@@ -1,6 +1,7 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CartService } from 'src/app/services/cart.service';
+import { EKommerceFormService } from 'src/app/services/ekommerce-form.service';
 
 
 @Component({
@@ -13,8 +14,10 @@ export class CheckoutComponent implements OnInit {
   checkoutFormGroup : FormGroup;
   totalPrice:number = 0;
   totalQuantity:number = 0;
+  creditCardMonths:number[] = [];
+  creditCardYears:number[] = [];
 
-  constructor(private formBuilder : FormBuilder, private cartService:CartService) { }
+  constructor(private formBuilder : FormBuilder, private cartService:CartService, private formService : EKommerceFormService) { }
 
   ngOnInit(): void {
     this.checkoutFormGroup = this.formBuilder.group({ 
@@ -47,8 +50,17 @@ export class CheckoutComponent implements OnInit {
       }),
       })
 
+      this.formService.getMonths((new Date()).getMonth() + 1).subscribe(
+        data => this.creditCardMonths = data
+      );
+
+      this.formService.getValidCreditCardYeards((new Date()).getFullYear()).subscribe(
+        data => this.creditCardYears = data
+      );
+
       this.showBill();
   }
+
   showBill() {
    this.cartService.totalPrice.subscribe(data => this.totalPrice = data);
    this.cartService.totalQuantity.subscribe(data => this.totalQuantity = data);
@@ -68,5 +80,20 @@ export class CheckoutComponent implements OnInit {
   onSubmit() {
     console.log("purchase button works customerDetails = " + JSON.stringify(this.checkoutFormGroup.get('customer')?.value));
     console.log("purchase button works shippingAddress = " + JSON.stringify(this.checkoutFormGroup.get('shippingAddress')?.value));
+  }
+
+  handleMonthYearRelation() {
+    let month = 1;
+    const creditCardForm = this.checkoutFormGroup.get('creditCardInfo');
+
+    console.log(JSON.stringify(creditCardForm?.value))
+
+    if(creditCardForm?.value.expirationYear == (new Date()).getFullYear()) {
+        month = (new Date()).getMonth() + 1;
+    } 
+
+    this.formService.getMonths(month).subscribe(
+      data => this.creditCardMonths = data 
+    );
   }
 }
