@@ -2,135 +2,176 @@
     <div class="section-content section-content-p30 e-spc">
         <div class="container-fluid">
 
-            <div class="form-area">
-                <h3>Customer</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="input-space">
-                            <input type="text" placeholder="First Name">
+            <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+                <div formGroupName="customer" class="form-area">
+                    <h3>Customer</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-space">
+                                <input formControlName="firstName" type="text" placeholder="First Name">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="input-space">
-                            <input type="text" placeholder="Last Name">
+                        <div class="col-md-6">
+                            <div class="input-space">
+                                <input formControlName="lastName" type="text" placeholder="Last Name">
+                            </div>
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="col-md-6">
-                        <div class="input-space">
-                            <input type="text" placeholder="Email Address">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--Form 2-->
-            <div class="form-area">
-                <h3>Shipping Address</h3>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="input-space">
-                            <input type="text" placeholder="Street">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="input-space">
-                            <input type="text" placeholder="City">
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="input-space">
-                            <select>
-                                <option>State / Province</option>
-                                <option></option>
-                                <option></option>
-                                <option></option>
-                                <option></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="input-space">
-                            <input type="text" placeholder="Zip Code / Postal Code">
+                        <div class="clearfix"></div>
+                        <div class="col-md-6">
+                            <div class="input-space">
+                                <input formControlName="email" type="text" placeholder="Email Address">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="input-space">
-                <label class="au-checkbox">
-                    <input type="checkbox" checked="checked">
-                    <span class="au-checkmark"></span> Bill Address same as Shipping Adress
-                </label>
-            </div>
 
-            <div class="form-area">
-                <h3>Credit Card</h3>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="input-space">
-                            <select>
-                                <option>Visa</option>
-                                <option></option>
-                                <option></option>
-                                <option></option>
-                                <option></option>
-                            </select>
+                <!--Form 2-->
+                <div formGroupName="shippingAddress" class="form-area">
+                    <h3>Shipping Address</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <select formControlName="country">
+                                    <option value="" disabled selected>Country</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="input-space">
-                            <input type="text" placeholder="Name on card">
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <input formControlName="street" type="text" placeholder="Street">
+                            </div>
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="col-md-8">
-                        <div class="input-space">
-                            <input type="text" placeholder="Card number">
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <input formControlName="city" type="text" placeholder="City">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="input-space">
-                            <input type="text" placeholder="CVV2 number">
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <select formControlName="state">
+                                    <option value="" disabled selected>State</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
-
-                    <div class="col-md-2"> <label class="date">Expiration Date</label></div>
-                    <div class="col-md-5">
-                        <div class="input-space">
-                            <select>
-                                <option>Month</option>
-                                <option></option>
-                                <option></option>
-                                <option></option>
-                                <option></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="input-space">
-                            <select>
-                                <option>Year</option>
-                                <option></option>
-                                <option></option>
-                                <option></option>
-                                <option></option>
-                            </select>
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <input formControlName="zipCode" type="text" placeholder="Zip Code / Postal Code">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="input-space">
+                    <label class="au-checkbox">
+                        <input type="checkbox" (change)="copyShippingAddressToBillingAddress($event)" value="checked">
+                        <span class="au-checkmark"></span> Bill Address same as Shipping Adress
+                    </label>
+                </div>
 
-            <div class="form-area">
-                <h3>Review Your Order</h3>
-                <b>Total Quantity: 2</b>
-                <h4>Shipping: FREE</h4>
-                <B>Total Price: $19.99</B>
-            </div>
-            <div class="text-center">
-                <button class="btn btn-info">Purchase</button>
-            </div>
+                <!--Form 3-->
+                <div formGroupName="billingAddress" class="form-area">
+                    <h3>Billing Address</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <select formControlName="country">
+                                    <option value="" disabled selected>Country</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <input formControlName="street" type="text" placeholder="Street">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <input formControlName="city" type="text" placeholder="City">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <select formControlName="state">
+                                    <option value="" disabled selected>State</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <input formControlName="zipCode" type="text" placeholder="Zip Code / Postal Code">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Form 4 Credit Card -->
+                <div formGroupName="creditCardInfo" class="form-area">
+                    <h3>Credit Card</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <select formControlName="type">
+                                    <option>Visa</option>
+                                    <option>Mastercard</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-space">
+                                <input formControlName="name" type="text" placeholder="Name on card">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-8">
+                            <div class="input-space">
+                                <input formControlName="number" type="text" placeholder="Card number">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-space">
+                                <input formControlName="cvv" type="text" placeholder="CVV2 number">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-2"> <label class="date">Expiration Date</label></div>
+                        <div class="col-md-5">
+                            <div class="input-space">
+                                <select formControlName="expirationMonth">
+                                    <option>Month</option>
+                                    <option></option>
+                                    <option></option>
+                                    <option></option>
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-space">
+                                <select formControlName="expirationYear">
+                                    <option>Year</option>
+                                    <option></option>
+                                    <option></option>
+                                    <option></option>
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-area">
+                    <h3>Review Your Order</h3>
+                    <b>Total Quantity: {{totalQuantity}}</b>
+                    <h4>Shipping: FREE</h4>
+                    <B>Total Price: {{totalPrice | currency : 'INR'}}</B>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-info">Purchase</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
