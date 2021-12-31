@@ -1,22 +1,59 @@
-<table class="table table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Image</th>
-            <th>SKU</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Units in Stock</th>
-        </tr>
-   </thead>
-    <tbody>
-        <tr *ngFor="let product of products">
-            <td class="align-middle"><img src={{[product.imageUrl]}} height="50"/> </td>
-            <td class="align-middle">{{product.sku}}</td>
-            <td class="align-middle">{{product.name}}</td>
-            <td class="align-middle">{{product.description}}</td>
-            <td class="align-middle">{{product.unitPrice | currency : 'INR'}}</td>
-            <td class="align-middle">{{product.unitsInStock}}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="main-content">
+    <div class="section-content section-content-p30">
+        <h4>{{currentCategoryName}}</h4>
+        <hr />
+        <div class="container-fluid">
+            <div class="row">
+                <!--loop over products-->
+                <div *ngFor="let product of products" class="col-md-3">
+                    <div class="product-box">
+                        <a *ngIf="searchMode; else elseBlock1" routerLink="/search/{{product.id}}/{{keyword}}">
+                            <img src={{product.imageUrl}} class="img-responsive">
+                        </a>
+                        <ng-template #elseBlock1> <a
+                                routerLink="/products/{{product.id}}/{{currentCategoryId}}/{{currentCategoryName}}">
+                                <img src={{product.imageUrl}} class="img-responsive">
+                            </a></ng-template>
+                        <a *ngIf="searchMode; else elseBlock2" routerLink="/search/{{product.id}}/{{keyword}}">
+                            <h1>{{product.name}}</h1>
+                        </a>
+                        <ng-template #elseBlock2> <a routerLink="/products/{{product.id}}/{{currentCategoryId}}/{{currentCategoryName}}">
+                                <h1>{{product.name}}</h1>
+                            </a></ng-template>
+                        <div class="price">{{product.unitPrice | currency : 'INR'}}</div>
+                        <button (click)="addToCart(product)" class="btn btn-primary btn-sm">Add to cart</button>
+                    </div>
+                </div>
+                <!-- if no search results -->
+                <div *ngIf="products?.length==0" class="alert alert-warning col-md-12" role="alert"> No products found
+                    with keyword "{{keyword}}"</div>
+            </div>
+
+            <!-- begin footer -->
+            <div class="footer-pagination">
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="col-md-9" style="padding-left: 10%;">
+                            <ngb-pagination [(page)]="page" [pageSize]="size" [collectionSize]="totalElements"
+                                [maxSize]="5" [boundaryLinks]="true" (pageChange)="listProducts()">
+                            </ngb-pagination>
+                        </div>
+
+                        <div class="col-md-3 mt-2" style="text-align: right;">
+                            <span class="mr-2"> Page Size</span>
+                            <select (change)="updatePageSize($any($event.target).value)">
+                                <option selected="true">5</option>
+                                <option>10</option>
+                                <option>20</option>
+                                <option>50</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- end footer -->
+        </div>
+    </div>
+</div>
